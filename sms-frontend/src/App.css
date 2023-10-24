@@ -1,0 +1,73 @@
+.body-container {
+  height: 100vh;
+  border: 10px solid white;
+  border-radius: 25px;
+  border-style: solid;
+  background: linear-gradient(to bottom, #054769 50%, #FFFFFF 50%);
+}
+
+.header-container {
+  text-align: center;
+  margin-top: 150px;
+  color: #FFFFFF;
+  font-size: 30px;
+}
+
+.main-container {
+  height: 53vh;
+  border: 1px solid #054769;
+  border-radius: 25px;
+  border-style: solid;
+  text-align: center;
+  margin-top: 0px;
+}
+
+.field-container {
+  margin-top: 60px;
+}
+
+h2 {
+  color: #032D43;
+}
+
+input[type=text], select {
+  width: 20%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #054769;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[id=sendButton], select {
+  width: 20%;
+  font-size: 20px;
+  color: #FFFFFF;
+  background-color: #032D43;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[id=sendButton]:hover {
+  background-color: #054769; 
+}
+
+input[id=seeMessagesButton], select {
+  width: 20%;
+  font-size: 20px;
+  color: #054769;
+  background-color: #D3D3D3;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[id=seeMessagesButton]:hover {
+  background-color: #ABABAB; 
+}
