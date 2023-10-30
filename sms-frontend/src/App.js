@@ -58,7 +58,6 @@ function App() {
         <div className="main-container">
           <div className="field-container">
             <h2>Send a message!</h2>
-            <form action="/placeholder_page.php">
               <label for="pNumber">Phone Number</label>
               <br></br>
               <input type="text" id="pNumber" name="phoneNumber" placeholder="Enter a phone number..." value={phoneNumber} onChange={updatePhoneNumber}></input>
@@ -72,10 +71,10 @@ function App() {
               <br></br>
 
               <input type="submit" id="sendButton" value="Send" onClick={() => submitMessage()}></input>
-            </form>
-            <form>
-              <input type="submit" id="seeMessagesButton" value="View messages" ></input>
-            </form>
+      
+              <br></br>
+
+              <input type="submit" id="seeMessagesButton" value="View sent messages" ></input>
           </div>
         </div>
       </body>
