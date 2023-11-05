@@ -8,7 +8,7 @@ const { CustomerMessage } = require("../models");
 const CreateCustomerMessage = async(req, res) => {
     console.log(`Logging request: ${req.body}`+JSON.stringify(req.body));
 
-    if (!req.body.phoneNumber || !req.body.message) {
+    if (!req.body.firstName || !req.body.lastName || !req.body.phoneNumber || !req.body.message) {
         return res.status(400).send("Missing fields.");
     }
 
@@ -22,6 +22,8 @@ const CreateCustomerMessage = async(req, res) => {
     const client = new twilio(accountSid, authToken);
 
     await CustomerMessage.create({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
         phoneNumber: req.body.phoneNumber, 
         message: req.body.message,
         sent: "Success.",
@@ -50,5 +52,5 @@ const getCustomerMessages = async (req, res) => {
 
 module.exports = {
     CreateCustomerMessage,
-    getCustomerMessages
+    getCustomerMessages,
 };

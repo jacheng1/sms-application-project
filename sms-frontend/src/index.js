@@ -9,6 +9,7 @@ import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
+// Renders elements according to their paths
 const router = createBrowserRouter([
   {
     path: "/",

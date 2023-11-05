@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './App.css';
+import retrieveMessages from './Components/Messages';
 import messageLogo from './messageLogo.png';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
@@ -26,6 +27,8 @@ function Copyright(props) {
 
 function App() {
   // Memory storage
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState(null);
@@ -47,6 +50,22 @@ function App() {
 
     console.log("isOverlayOpen is",isOverlayOpen);
   }, [isOverlayOpen])
+
+  const updateFirstName = (e) => {
+    // Output value that was typed into text field
+    console.log({value: e.target.value});
+
+    // Save input value into local memory
+    setFirstName(e.target.value);
+  };
+
+  const updateLastName = (e) => {
+    // Output value that was typed into text field
+    console.log({value: e.target.value});
+
+    // Save input value into local memory
+    setLastName(e.target.value);
+  }
 
   const updatePhoneNumber = (e) => {
     // Output value that was typed into text field
@@ -73,12 +92,15 @@ function App() {
 
     // Collect data from the state via parameters, & send data of parameters to the backend
     axios.post("http://localhost:3000/create-customer-text", {
+      firstName: firstName,
+      lastName: lastName,
       phoneNumber: phoneNumber, 
       message: message,
     })
     .then((response) => {
       console.log("MESSAGE RETURNED: ", response.data);
       setSuccessfulResponse(response.data);
+      retrieveMessages();
     })
     .catch((e) => {
       setError(e.message);
@@ -122,8 +144,34 @@ function App() {
                   alignItems: 'center',
                 }}
               >
-                <Box component="form" noValidate sx={{mt: 3}}>
+                <Box component="form" noValidate>
                   <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        fullWidth
+                        variant="outlined"
+                        type="text"
+                        id="fName"
+                        label="First Name"
+                        name="firstName"
+                        value={firstName}
+                        onChange={updateFirstName}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        fullWidth
+                        variant="outlined"
+                        type="text"
+                        id="lName"
+                        label="Last Name"
+                        name="lastName"
+                        value={lastName}
+                        onChange={updateLastName}
+                      />
+                    </Grid>
                     <Grid item xs={12}>
                       <TextField
                         required
@@ -166,6 +214,7 @@ function App() {
                     type="submit"
                     id="seeMessagesButton"
                     variant="contained"
+                    href="/messages"
                     sx={{mt: 3, mb: 2}}
                   >
                     View Sent Messages
