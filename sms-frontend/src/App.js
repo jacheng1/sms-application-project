@@ -1,3 +1,6 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import './App.css';
 import messageLogo from './messageLogo.png';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
@@ -6,9 +9,6 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import './App.css';
 
 // Return copyright string
 function Copyright(props) {
@@ -34,13 +34,10 @@ function App() {
   // 1- Create state that will know if the overlay is opened or closed
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
 
-  // Everytime a value changes, the content of the use effect is going to be
-  // evaluated
+  // Everytime isOverlayOpen changes, the content of the use effect is going to be evaluated
   useEffect(() => {
-    // if the open
-    // update the overlay display to be visible
-    // if closed
-    // update the overlay to be none
+    // if open, update the overlay display to be "visible"
+    // if closed, update the overlay to be "none"
     if (isOverlayOpen) {
       document.getElementById("overlay").style.display = "block";
     }
@@ -105,9 +102,9 @@ function App() {
               <span class="line line3"></span>
             </div>
           <div class="hamburger-items">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Messages</a></li>
-            <li><a href="#">Contacts</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/messages">Messages</a></li>
+            <li><a href="/contacts">Contacts</a></li>
           </div>
         </div>
         <div className="header-container">
