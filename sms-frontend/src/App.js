@@ -1,3 +1,7 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import './App.css';
+// import retrieveMessages from './Components/utils';
 import messageLogo from './messageLogo.png';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
@@ -6,9 +10,8 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import './App.css';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 
 // Return copyright string
 function Copyright(props) {
@@ -26,21 +29,23 @@ function Copyright(props) {
 
 function App() {
   // Memory storage
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState(null);
   const [successfulResponse, setSuccessfulResponse] = useState(null);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [openError, setOpenError] = useState(false);
+  // const [sentMessages, setSentMessages] = useState([]);
 
   // 1- Create state that will know if the overlay is opened or closed
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
 
-  // Everytime a value changes, the content of the use effect is going to be
-  // evaluated
+  // Everytime isOverlayOpen changes, the content of the use effect is going to be evaluated
   useEffect(() => {
-    // if the open
-    // update the overlay display to be visible
-    // if closed
-    // update the overlay to be none
+    // if open, update the overlay display to be "visible"
+    // if closed, update the overlay to be "none"
     if (isOverlayOpen) {
       document.getElementById("overlay").style.display = "block";
     }
@@ -50,6 +55,22 @@ function App() {
 
     console.log("isOverlayOpen is",isOverlayOpen);
   }, [isOverlayOpen])
+
+  const updateFirstName = (e) => {
+    // Output value that was typed into text field
+    console.log({value: e.target.value});
+
+    // Save input value into local memory
+    setFirstName(e.target.value);
+  };
+
+  const updateLastName = (e) => {
+    // Output value that was typed into text field
+    console.log({value: e.target.value});
+
+    // Save input value into local memory
+    setLastName(e.target.value);
+  }
 
   const updatePhoneNumber = (e) => {
     // Output value that was typed into text field
@@ -76,26 +97,75 @@ function App() {
 
     // Collect data from the state via parameters, & send data of parameters to the backend
     axios.post("http://localhost:3000/create-customer-text", {
+      firstName: firstName,
+      lastName: lastName,
       phoneNumber: phoneNumber, 
       message: message,
     })
     .then((response) => {
       console.log("MESSAGE RETURNED: ", response.data);
+
+      // Reset states to default empty state
+      setFirstName("");
+      setLastName("");
+      setPhoneNumber("");
+      setMessage("");
+
+      // Make success snack bar message visible
+      setOpenSuccess(true);
+
+      // Set a successful response
       setSuccessfulResponse(response.data);
+      // retrieveMessages();
     })
     .catch((e) => {
+      // Make error snack bar message visible
+      setOpenError(true);
+
+      // Set a error response
       setError(e.message);
     });
   };
+
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenSuccess(false);
+  };
+
+  const handleCloseError = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenError(false);
+  };
+
+  /*
+  // Everytime dependency array value is updated, useEffect is called
+  useEffect(() => {
+    setSentMessages(retrieveMessages())
+  }, []);
+  */
 
 // When the X button is clicked I want to toggle the value
 // from false -> true ; true -> false
 // isOverlayOpen
   return (
-    <html>
+    <html className="messages-container">
       <body className="body-container">
-        {error && <div>ERROR: DATA WAS NOT SENT SUCCESSFULLY {error}</div>}
-        {successfulResponse && <div>MESSAGE SUCCESSFULLY CREATED {successfulResponse}</div>}
+        <Snackbar open={openSuccess} autoHideDuration={6000} onClose={handleCloseSuccess}>
+          <Alert onClose={handleCloseSuccess} severity="success" sx={{width: '100%'}}>
+            {successfulResponse}
+          </Alert>
+        </Snackbar>
+        <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
+          <Alert onClose={handleCloseError} severity="error" sx={{width: '100%'}}>
+            {error}
+          </Alert>
+        </Snackbar>
         <div id="overlay"></div>
         <div className="hamburger-container">
             <input class="checkbox" type="checkbox" onClick={() => setIsOverlayOpen(!isOverlayOpen)}/>
@@ -105,9 +175,9 @@ function App() {
               <span class="line line3"></span>
             </div>
           <div class="hamburger-items">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Messages</a></li>
-            <li><a href="#">Contacts</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/messages">Messages</a></li>
+            <li><a href="/contacts">Contacts</a></li>
           </div>
         </div>
         <div className="header-container">
@@ -125,8 +195,34 @@ function App() {
                   alignItems: 'center',
                 }}
               >
-                <Box component="form" noValidate sx={{mt: 3}}>
+                <Box component="form" noValidate>
                   <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        fullWidth
+                        variant="outlined"
+                        type="text"
+                        id="fName"
+                        label="First Name"
+                        name="firstName"
+                        value={firstName}
+                        onChange={updateFirstName}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        required
+                        fullWidth
+                        variant="outlined"
+                        type="text"
+                        id="lName"
+                        label="Last Name"
+                        name="lastName"
+                        value={lastName}
+                        onChange={updateLastName}
+                      />
+                    </Grid>
                     <Grid item xs={12}>
                       <TextField
                         required
@@ -156,7 +252,6 @@ function App() {
                   </Grid>
                   <Button
                     fullWidth
-                    type="submit"
                     id="sendButton"
                     onClick={() => submitMessage()}
                     variant="contained"
@@ -166,9 +261,9 @@ function App() {
                   </Button>
                   <Button
                     fullWidth
-                    type="submit"
                     id="seeMessagesButton"
                     variant="contained"
+                    href="/messages"
                     sx={{mt: 3, mb: 2}}
                   >
                     View Sent Messages

@@ -17,6 +17,12 @@ app.use(cors());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+/*
+app.engine('jade', require('jade').__express);
+app.get("/", function(req, res){
+  res.render('index');
+});
+*/
 
 app.use(logger('dev'));
 app.use(express.json());

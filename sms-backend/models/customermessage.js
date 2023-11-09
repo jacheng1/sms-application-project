@@ -14,8 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   CustomerMessage.init({
+    firstName: DataTypes.STRING,
+    lastName: DataTypes.STRING,
     phoneNumber: DataTypes.STRING,
-    message: DataTypes.STRING
+    message: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'CustomerMessage',
