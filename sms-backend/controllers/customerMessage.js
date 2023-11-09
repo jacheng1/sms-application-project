@@ -39,12 +39,17 @@ const CreateCustomerMessage = async(req, res) => {
         console.log({error});
     });
 
-    return res.status(200).send("Successfully saved, and sent.");
+    return res.status(200).send("MESSAGE SUCCESSFULLY CREATED!");
 };
 
 const getCustomerMessages = async (req, res) => {
     // find all customer messages
     const response = await CustomerMessage.findAll();
+    try {
+        const response = await CustomerMessage.findAll();
+    } catch(e) {
+        console.log("ERROR:::", e);
+    }
 
     // return customer messages stored in response
     return res.status(200).send(response);

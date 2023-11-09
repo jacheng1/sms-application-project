@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './App.css';
-import retrieveMessages from './Components/Messages';
+// import retrieveMessages from './Components/utils';
 import messageLogo from './messageLogo.png';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
@@ -10,6 +10,8 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 
 // Return copyright string
 function Copyright(props) {
@@ -33,6 +35,9 @@ function App() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState(null);
   const [successfulResponse, setSuccessfulResponse] = useState(null);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [openError, setOpenError] = useState(false);
+  // const [sentMessages, setSentMessages] = useState([]);
 
   // 1- Create state that will know if the overlay is opened or closed
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
@@ -99,22 +104,68 @@ function App() {
     })
     .then((response) => {
       console.log("MESSAGE RETURNED: ", response.data);
+
+      // Reset states to default empty state
+      setFirstName("");
+      setLastName("");
+      setPhoneNumber("");
+      setMessage("");
+
+      // Make success snack bar message visible
+      setOpenSuccess(true);
+
+      // Set a successful response
       setSuccessfulResponse(response.data);
-      retrieveMessages();
+      // retrieveMessages();
     })
     .catch((e) => {
+      // Make error snack bar message visible
+      setOpenError(true);
+
+      // Set a error response
       setError(e.message);
     });
   };
+
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenSuccess(false);
+  };
+
+  const handleCloseError = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenError(false);
+  };
+
+  /*
+  // Everytime dependency array value is updated, useEffect is called
+  useEffect(() => {
+    setSentMessages(retrieveMessages())
+  }, []);
+  */
 
 // When the X button is clicked I want to toggle the value
 // from false -> true ; true -> false
 // isOverlayOpen
   return (
-    <html>
+    <html className="messages-container">
       <body className="body-container">
-        {error && <div>ERROR: DATA WAS NOT SENT SUCCESSFULLY {error}</div>}
-        {successfulResponse && <div>MESSAGE SUCCESSFULLY CREATED {successfulResponse}</div>}
+        <Snackbar open={openSuccess} autoHideDuration={6000} onClose={handleCloseSuccess}>
+          <Alert onClose={handleCloseSuccess} severity="success" sx={{width: '100%'}}>
+            {successfulResponse}
+          </Alert>
+        </Snackbar>
+        <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
+          <Alert onClose={handleCloseError} severity="error" sx={{width: '100%'}}>
+            {error}
+          </Alert>
+        </Snackbar>
         <div id="overlay"></div>
         <div className="hamburger-container">
             <input class="checkbox" type="checkbox" onClick={() => setIsOverlayOpen(!isOverlayOpen)}/>
@@ -201,7 +252,6 @@ function App() {
                   </Grid>
                   <Button
                     fullWidth
-                    type="submit"
                     id="sendButton"
                     onClick={() => submitMessage()}
                     variant="contained"
@@ -211,7 +261,6 @@ function App() {
                   </Button>
                   <Button
                     fullWidth
-                    type="submit"
                     id="seeMessagesButton"
                     variant="contained"
                     href="/messages"

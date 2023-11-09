@@ -146,12 +146,12 @@
 }
 
 .main-container {
-  height: 58vh;
+  height: 60vh;
   border: 1px solid #054769;
   border-radius: 25px;
   border-style: solid;
   text-align: center;
-  margin-top: 0px;
+  margin-top: -20px;
 }
 
 .field-container {
@@ -161,6 +161,15 @@
 h2 {
   color: #054769;
 }
+
+.alert-container{
+  position: relative;
+}
+
+.Alert {
+  position: absolute;
+}
+
 /*
 input[type=text], select {
   width: 20%;

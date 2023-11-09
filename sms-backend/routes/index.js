@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
 router.post("/create-customer-text", CreateCustomerMessage);
 
 /* GET create customer text */
-router.get("/customer-texts", getCustomerMessages);
+router.get("/create-customer-text", getCustomerMessages);
 
 /* POST create customer */
 router.post("/create-customer", CreateCustomer);
